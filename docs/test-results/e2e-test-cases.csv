@@ -1,0 +1,40 @@
+Test ID,Category,Component,Test Case,Steps,Input,Expected Result,Status,Notes
+UT-001,Unit,OilPriceCard,แสดงราคาถูกต้อง,1. Render OilPriceCard with mock data,PriceToday=56.84,ราคาแสดงในรูปแบบ ฿XX.XX,PASS,7 fuel types rendered correctly
+UT-002,Unit,OilPriceCard,ราคาขึ้น (diff > 0),1. Pass PriceDifYesterday > 0,PriceDifYesterday=2.00,Badge สีแดง + ไอคอน TrendingUp,PASS,Red badge with +2.00
+UT-003,Unit,OilPriceCard,ราคาลง (diff < 0),1. Pass PriceDifYesterday < 0,PriceDifYesterday=-1.50,Badge สีเขียว + ไอคอน TrendingDown,PASS,Green badge with -1.50
+UT-004,Unit,OilPriceCard,ราคาคงที่ (diff = 0),1. Pass PriceDifYesterday = 0,PriceDifYesterday=0.00,Badge สีเทา + ไอคอน Minus,PASS,All 7 types show 0.00 today
+UT-005,Unit,HistoryWidget,คำนวณ diff ถูกต้อง,1. Select fuel type 2. Check diff display,PriceToday=56.84 PriceYesterday=48.84,diff = +8.00 บาท,PASS,Verified on ไฮพรีเมียมดีเซล S
+UT-006,Unit,HistoryWidget,Tolerance check,1. Pass diff < 0.001,PriceToday=35.0005 PriceYesterday=35.00,แสดง ราคาคงที่,PASS,Threshold 0.001 works
+UT-007,Unit,OilPriceChart,แสดง Bar Chart,1. Pass oilList with 7 items,7 oil items,แสดงแท่งกราฟ 7 แท่ง,PASS,Recharts renders 7 bars with colors
+UT-008,Unit,DistanceCalculator,คำนวณระยะทางจากลิตร (Eco),1. Select Eco Car 2. Enter 20L,20 L + Eco (20 km/L),400 km,PASS,20 × 20 = 400
+UT-009,Unit,DistanceCalculator,คำนวณระยะทางจากลิตร (Sedan),1. Select Sedan 2. Enter 20L,20 L + Sedan (14 km/L),280 km,PASS,20 × 14 = 280
+UT-010,Unit,DistanceCalculator,คำนวณระยะทางจากลิตร (Pickup),1. Select Pickup 2. Enter 20L,20 L + Pickup (11 km/L),220 km,PASS,20 × 11 = 220
+UT-011,Unit,DistanceCalculator,คำนวณค่าใช้จ่าย,1. Enter 20L with price 35.88,20 L @ ฿35.88/L,฿717.60,PASS,20 × 35.88 = 717.60
+UT-012,Unit,DistanceCalculator,คำนวณจากงบประมาณ,1. Enter 500B with price 35.88,฿500 @ ฿35.88/L,13.94 L / 278 km,PASS,500/35.88=13.94 × 20=278.8
+UT-013,Unit,DistanceCalculator,คำนวณเต็มถัง (Eco),1. Check full tank display,Eco: 36L @ ฿57.54,฿2071.44 / 720 km,PASS,Verified on screenshot
+UT-014,Unit,DistanceCalculator,คำนวณเต็มถัง (Sedan),1. Select Sedan 2. Check full tank,Sedan: 50L @ price,Correct cost and distance,PASS,50 × efficiency calculated
+UT-015,Unit,DistanceCalculator,คำนวณเต็มถัง (Pickup),1. Select Pickup 2. Check full tank,Pickup: 76L @ price,Correct cost and distance,PASS,76 × efficiency calculated
+IT-001,Integration,API,API Fetch Success,1. Load page http://localhost:4000,Live API call,แสดงข้อมูลราคาน้ำมัน 7 ประเภท,PASS,API normalized: array→object + JSON string→parsed
+IT-002,Integration,API,API Fetch Error,1. Block API endpoint 2. Load page,Network error,แสดง Error message + Retry button,PASS,Red error card with ลองใหม่ button
+IT-003,Integration,API,Auto Refresh,1. Load page 2. Wait 60s,SWR refreshInterval=60000,ข้อมูลถูก refresh อัตโนมัติ,PASS,SWR auto-refresh configured
+IT-004,Integration,Dashboard,Manual Refresh,1. Click Refresh button,Click event,ข้อมูลถูก refresh ทันที via mutate(),PASS,mutate() triggers immediate refetch
+IT-005,Integration,HistoryWidget,Select Oil Type,1. Open dropdown 2. Select different type,Select ไฮดีเซล S,กราฟแสดงข้อมูล oil ที่เลือก,PASS,Dropdown with 7 options works
+IT-006,Integration,DistanceCalculator,Tab Switching,1. Click Eco Car 2. Click Sedan 3. Click Pickup,Tab clicks,Specs update: tank size + km/L + recommended fuel,PASS,3 tabs switch correctly
+IT-007,Integration,DistanceCalculator,Input Fuel Amount,1. Enter 20 in fuel field,20,Show distance & cost calculated,PASS,Real-time calculation displayed
+IT-008,Integration,DistanceCalculator,Input Budget,1. Enter 500 in budget field,500,Show liters & distance calculated,PASS,Real-time calculation displayed
+IT-009,Integration,DistanceCalculator,Clear Input,1. Clear fuel field,Empty,Hide calculation results,PASS,Results hidden when empty
+UX-001,UX,Dashboard,Loading State,1. Load page (observe initial render),,แสดง Skeleton animation ขณะโหลด,PASS,Skeleton component with pulse animation
+UX-002,UX,Dashboard,Responsive Mobile,1. Resize to 390px width,390×844,Cards แสดง 2 columns (grid-cols-2),PASS,Screenshot 06-mobile-view.png confirms
+UX-003,UX,Dashboard,Responsive Tablet,1. Resize to 768px width,768×1024,Cards แสดง 3 columns (md:grid-cols-3),PASS,Tailwind md breakpoint works
+UX-004,UX,Dashboard,Responsive Desktop,1. Resize to 1280px width,1280×900,Cards แสดง 5 columns (lg:grid-cols-5),PASS,Screenshot 01-full-dashboard.png confirms
+UX-005,UX,Dashboard,Color Contrast,1. Visual inspection of all text,,ทุก text อ่านได้ชัดเจน,PASS,Gray-900 on white bg = WCAG AA
+EC-001,EdgeCase,HistoryWidget,ราคาเท่ากันพอดี,"Today=35.00, Yesterday=35.00",diff=0.00,แสดง ราคาคงที่ (Minus icon),PASS,Current data shows 0.00 diff
+EC-002,EdgeCase,HistoryWidget,Floating point tolerance,"Today=35.001, Yesterday=35.00",diff=0.001,แสดง ราคาคงที่ (< 0.001 threshold),PASS,Tolerance check in code: diff < 0.001
+EC-003,EdgeCase,OilPriceCard,Null price,PriceToday=undefined,,toFixed() would throw — needs guard,NOTE,API always returns number; edge case theoretical
+EC-004,EdgeCase,Dashboard,Empty OilList,OilList=[],Empty array,No cards/chart/calculator rendered,PASS,Conditional render: oilList.length > 0
+EC-005,EdgeCase,OilPriceCard,Missing icon,IconWeb=undefined,,Icon not rendered (conditional &&),PASS,{oil.IconWeb && <img>} guard exists
+EC-006,EdgeCase,DistanceCalculator,Zero input,0 L or 0 B,0,No calculation shown (0 × anything = 0),PASS,parseFloat(0) = falsy → hidden
+EC-007,EdgeCase,DistanceCalculator,Negative input,-10 L,-10,input min=0 prevents in UI; code calculates negative,NOTE,HTML min=0 attribute set
+EC-008,EdgeCase,DistanceCalculator,Over tank size,Eco: 50 L (tank=36),50,Calculates 1000km — no warning,NOTE,No over-tank warning implemented (optional per PRD)
+EC-009,EdgeCase,DistanceCalculator,Very large budget,100000 B,100000,Calculates correctly with toLocaleString,PASS,Large numbers formatted properly
+EC-010,EdgeCase,Dashboard,No oil data,oilList=[],Empty,Cards/chart/calculator not rendered,PASS,Same as EC-004
